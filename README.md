@@ -1,4 +1,4 @@
-# opinion_vue_frontend
+# jobby-app
 
 ## Project setup
 ```
