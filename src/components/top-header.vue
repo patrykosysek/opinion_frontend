@@ -9,7 +9,9 @@
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
           <b-nav-item to="/">Home</b-nav-item>
-          <b-nav-item to="/about">About</b-nav-item>
+          <b-nav-item v-if="isAdmin" to="/">Admin</b-nav-item>
+          <b-nav-item v-if="isUser" to="/">User</b-nav-item>
+          <!-- <b-nav-item to="/login">Login</b-nav-item> -->
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
@@ -19,7 +21,10 @@
               <em>User</em>
             </template>
             <b-dropdown-item href="#">Profile</b-dropdown-item>
-            <b-dropdown-item href="#">Sign Out</b-dropdown-item>
+            <b-dropdown-item v-if="isLogged" @click="logOut"
+              >Logout</b-dropdown-item
+            >
+            <b-dropdown-item v-else to="/login">Login</b-dropdown-item>
           </b-nav-item-dropdown>
         </b-navbar-nav>
       </b-collapse>
@@ -28,7 +33,29 @@
 </template>
 
 <script>
-export default {};
+export default {
+  computed: {
+    isLogged() {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (user != null) return true;
+      else return false;
+    },
+    isAdmin() {
+      const user = JSON.parse(localStorage.getItem("user"));
+      return this.isLogged && user.role == "ADMIN";
+    },
+    isUser() {
+      const user = JSON.parse(localStorage.getItem("user"));
+      return this.isLogged && user.role == "OPINION_USER";
+    },
+  },
+  methods: {
+    logOut() {
+      localStorage.removeItem("user");
+      window.location.reload(true);
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
