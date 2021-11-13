@@ -9,6 +9,7 @@
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
           <b-nav-item to="/">Home</b-nav-item>
+          <b-nav-item to="/recommendation">Recommendation</b-nav-item>
           <b-nav-item v-if="isAdmin" to="/">Admin</b-nav-item>
           <b-nav-item v-if="isUser" to="/">User</b-nav-item>
           <!-- <b-nav-item to="/login">Login</b-nav-item> -->
