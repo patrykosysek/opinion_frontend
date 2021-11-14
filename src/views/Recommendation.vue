@@ -7,6 +7,7 @@
     <b-container>
       <p>Work of culture type</p>
       <b-form-select
+        class="select"
         v-model="selectedType"
         :options="this.types"
         v-on:change="setGernes"
@@ -16,6 +17,7 @@
     <b-container>
       <p>Work of culture genre</p>
       <b-form-select
+        class="select"
         v-model="selectedGenre"
         :options="genresTypes"
         :disabled="getStatus"
@@ -63,6 +65,7 @@
       <hr />
       <hr />
       <b-pagination
+        v-if="show"
         align="center"
         v-model="currentPage"
         :per-page="perPage"
@@ -90,6 +93,9 @@ export default {
       if (this.status == "false") return false;
       else return true;
     },
+    show() {
+      return this.rows > 0;
+    },
   },
   data() {
     return {
@@ -105,7 +111,7 @@ export default {
       disabled: false,
       currentPage: 1,
       perPage: 1,
-      rows: 2,
+      rows: 0,
       recommendations: [],
       displayRecommendations: [],
       loading: false,
@@ -257,6 +263,7 @@ export default {
       this.loading = true;
       this.displayRecommendations = [];
       this.currentPage = 1;
+      this.rows = 0;
 
       if (this.search != "") this.getRecommendationBySearch();
       else if (this.getStatus == true) {
@@ -283,3 +290,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.select {
+  margin: 10px;
+  width: 20vh;
+}
+</style>

@@ -13,12 +13,45 @@
         class="mb-2"
         :footer="type"
       >
-        <b-button v-b-tooltip.hover title="Tooltip content" variant="primary"
-          >Go somewhere</b-button
-        >
-        <b-modal title="BootstrapVue">
-          <p class="my-4">Hello from modal!</p>
-        </b-modal>
+        <b-button-group vertical v-if="isLogged">
+          <b-button
+            class="btn"
+            v-b-tooltip.hover
+            title="Open works details"
+            variant="primary"
+            >Details</b-button
+          >
+
+          <b-button
+            v-b-tooltip.hover
+            title="Open works discussions"
+            variant="primary"
+            >Discussions</b-button
+          >
+
+          <b-button
+            v-b-tooltip.hover
+            title="Open works reviews"
+            variant="primary"
+            >Reviews</b-button
+          >
+          <b-button
+            v-b-tooltip.hover
+            title="Add to your watch list"
+            variant="primary"
+            >Add to watch list</b-button
+          >
+          <b-button
+            v-b-tooltip.hover
+            title="Add to your seen list"
+            variant="primary"
+            >Add to seen list</b-button
+          >
+
+          <b-button v-b-tooltip.hover title="Add review" variant="primary"
+            >Add review</b-button
+          >
+        </b-button-group>
       </b-card>
     </b-col>
   </div>
@@ -27,7 +60,18 @@
 <script>
 export default {
   props: ["name", "id", "image", "type"],
+  computed: {
+    isLogged() {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (user != null) return true;
+      else return false;
+    },
+  },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.btn {
+  margin: 10px;
+}
+</style>

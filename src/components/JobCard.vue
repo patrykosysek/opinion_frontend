@@ -13,8 +13,8 @@
         class="mb-2"
         :footer="type"
       >
-        <b-button v-b-tooltip.hover title="Tooltip content" variant="primary"
-          >Go somewhere</b-button
+        <b-button v-b-tooltip.hover title="Open works details" variant="primary"
+          >Details</b-button
         >
         <b-modal title="BootstrapVue">
           <p class="my-4">Hello from modal!</p>
