@@ -8,7 +8,7 @@
     <b-container align="center">
       <b-col align-v="center">
         <job-card
-          v-for="rec in recommendations"
+          v-for="rec in displayRecommendations"
           :name="rec.title"
           :id="rec.id"
           :image="rec.imageUrl"
@@ -16,16 +16,19 @@
           :type="rec.workOfCultureType"
         ></job-card>
       </b-col>
-      <!-- <b-pagination
+      <hr>
+      <hr>
+      <b-pagination align="center"
         v-model="currentPage"
-        :total-rows="getRows"
         :per-page="perPage"
+        :total-rows ="rows"
         first-text="First"
         prev-text="Prev"
         next-text="Next"
         last-text="Last"
         @input="paginate(currentPage)"
-      ></b-pagination> -->
+      ></b-pagination>
+    
     </b-container>
   </div>
 </template>
@@ -44,14 +47,39 @@ export default {
     return {
       currentPage: 1,
       perPage: 1,
+      rows: 2,
       recommendations: [],
+      displayRecommendations: [],
       loading: false,
     };
   },
   components: { "job-card": JobCard },
   methods: {
+    paginate(currentPage) {
+      const start = (currentPage - 1) * this.perPage;
+      this.displayRecommendations = this.recommendations.slice(start, start + 1);
+      console.log("Halko");
+    },
+
+    async getRecommendations() {
+      this.loading = true;
+      try {
+        const response = await fetch(
+          "http://localhost:8080/api/work-of-culture/recommendation"
+        );
+        const data = await response.json();
+        console.log(data);
+        this.recommendations = data;
+        this.loading = false;
+        this.rows = this.recommendations.length;
+        this.displayRecommendations = data.slice(0, 1);
+      } catch (error) {
+        console.log(error);
+        this.loading = false;
+      }
+    },
+
     // async paginate(currentPage) {
-  
 
     //   console.log(currentPage);
 
@@ -87,22 +115,6 @@ export default {
     //   const data = await response.json();
     //   console.log(data);
     // },
-
-    async getRecommendations() {
-      this.loading = true;
-      try {
-        const response = await fetch(
-          "http://localhost:8080/api/work-of-culture/recommendation"
-        );
-        const data = await response.json();
-        console.log(data);
-        this.recommendations = data;
-        this.loading = false;
-      } catch (error) {
-        console.log(error);
-        this.loading = false;
-      }
-    },
   },
 };
 </script>
