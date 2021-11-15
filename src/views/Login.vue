@@ -1,36 +1,52 @@
 <template>
-  <div>
-    <b-container align-v="center">
+  <div class="login">
+    <b-alert :show="alertShow" :variant="alertVariant">{{
+      this.alerText
+    }}</b-alert>
+    <b-container>
+      <b-row>
+        <b-col>
+          <b-form-group
+            id="input-group-1"
+            label="Email address:"
+            label-for="input-1"
+          >
+            <b-form-input
+              id="input-1"
+              v-model="login.email"
+              type="email"
+              placeholder="Enter email"
+              required
+            ></b-form-input>
+          </b-form-group>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <b-form-group
+            id="input-group-2"
+            label="Password:"
+            label-for="input-2"
+          >
+            <b-form-input
+              id="input-2"
+              v-model="login.password"
+              type="password"
+              placeholder="Enter password"
+              required
+            ></b-form-input>
+          </b-form-group>
+        </b-col>
+      </b-row>
       <b-form @submit="onSubmit" v-if="show">
-        <b-alert :show="alertShow" :variant="alertVariant">{{
-          this.alerText
-        }}</b-alert>
-        <b-form-group
-          id="input-group-1"
-          label="Email address:"
-          label-for="input-1"
+        <b-button style="width: 10%" type="submit" variant="primary"
+          >Login</b-button
         >
-          <b-form-input
-            id="input-1"
-            v-model="login.email"
-            type="email"
-            placeholder="Enter email"
-            required
-          ></b-form-input>
-        </b-form-group>
-
-        <b-form-group id="input-group-2" label="Password:" label-for="input-2">
-          <b-form-input
-            id="input-2"
-            v-model="login.password"
-            type="password"
-            placeholder="Enter name"
-            required
-          ></b-form-input>
-        </b-form-group>
-
-        <b-button type="submit" variant="primary">Login</b-button>
       </b-form>
+      <div class="reg">
+        <p>U don't have account ?</p>
+        <b-link to="/registration">Registration</b-link>
+      </div>
     </b-container>
   </div>
 </template>
@@ -76,6 +92,7 @@ export default {
         this.user.nickname = data.user.nickname;
         this.user.accessToken = data.accessToken;
         this.user.role = data.role;
+        localStorage.removeItem("user");
         localStorage.setItem("user", JSON.stringify(this.user));
 
         window.location = "/";
@@ -90,3 +107,13 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.login {
+  padding: 30px;
+}
+
+.reg {
+  padding: 10px;
+}
+</style>

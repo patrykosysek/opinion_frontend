@@ -7,7 +7,7 @@
     </div>
     <b-container align="center">
       <b-col align-v="center">
-        <job-card
+        <job-card class="work"
           v-for="rec in displayRecommendations"
           :name="rec.title"
           :id="rec.id"
@@ -16,9 +16,10 @@
           :type="rec.workOfCultureType"
         ></job-card>
       </b-col>
-      <hr>
-      <hr>
-      <b-pagination align="center"
+
+     
+      <b-pagination class="pagination"
+      align="center"
         v-model="currentPage"
         :per-page="perPage"
         :total-rows ="rows"
@@ -28,6 +29,7 @@
         last-text="Last"
         @input="paginate(currentPage)"
       ></b-pagination>
+      
     
     </b-container>
   </div>
@@ -118,4 +120,20 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+
+.home{
+  padding: 30px;
+}
+
+.pagination{
+  bottom: 150px;
+  position: absolute;
+  
+}
+
+.work {
+  padding: 20px;
+}
+
+</style>

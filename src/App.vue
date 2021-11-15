@@ -1,22 +1,27 @@
 <template>
   <div id="app">
     <div class="page" v-if="getSpinner">
-      <b-spinner class="spinner" :variant="'primary'" :key="'primary'"></b-spinner>
+      <b-spinner
+        class="spinner"
+        :variant="'primary'"
+        :key="'primary'"
+      ></b-spinner>
     </div>
     <div id="nav">
       <top-header></top-header>
     </div>
     <router-view />
+    
   </div>
 </template>
 <script>
 import TopHeader from "@/components/top-header.vue";
 import { mapGetters } from "vuex";
 export default {
-  components: { "top-header": TopHeader },
+  components: { "top-header": TopHeader},
   computed: {
-    ...mapGetters(["getSpinner"])
-  }
+    ...mapGetters(["getSpinner"]),
+  },
 };
 </script>
 
@@ -27,10 +32,11 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+ 
 }
 
 #nav {
-  padding: 30px;
+  //padding: 30px;
 
   a {
     font-weight: bold;

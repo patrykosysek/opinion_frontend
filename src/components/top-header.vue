@@ -1,6 +1,8 @@
 <template>
   <div>
-    <p style="font-size:50px">OPINION</p>
+    <div class="name">
+      <p>OPINION</p>
+    </div>
     <b-navbar toggleable="lg" type="dark" variant="info">
       <b-navbar-brand href="#">OPINION</b-navbar-brand>
 
@@ -62,5 +64,10 @@ export default {
 <style lang="scss" scoped>
 #nav a.router-link-exact-active {
   color: white;
+}
+
+.name {
+  font-size: 50px;
+  vertical-align: middle;
 }
 </style>

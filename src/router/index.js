@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import Recommendation from "../views/Recommendation.vue";
+import Registration from "../views/Registration.vue";
 
 Vue.use(VueRouter);
 
@@ -24,6 +25,11 @@ const routes = [
     path:"/recommendation",
     name: "recommendation",
     component: Recommendation
+  },
+  {
+    path:"/registration",
+    name: "registration",
+    component: Registration
   }
 ];
 

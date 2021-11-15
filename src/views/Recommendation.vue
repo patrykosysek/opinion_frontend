@@ -1,42 +1,48 @@
 <template>
-  <div>
+  <div class="recommendation">
+    <h1>Recommendation</h1>
+    <hr />
     <b-alert :show="alertShow" :variant="alertVariant">{{
       this.alerText
     }}</b-alert>
-    <hr />
+
     <b-container>
-      <p>Work of culture type</p>
-      <b-form-select
-        class="select"
-        v-model="selectedType"
-        :options="this.types"
-        v-on:change="setGernes"
-      ></b-form-select>
-    </b-container>
-    <hr />
-    <b-container>
-      <p>Work of culture genre</p>
-      <b-form-select
-        class="select"
-        v-model="selectedGenre"
-        :options="genresTypes"
-        :disabled="getStatus"
-      ></b-form-select>
-    </b-container>
-    <hr />
-    <b-container>
-      <p>Work of culture title</p>
-      <b-form-input
-        size="sm"
-        class="mr-sm-2"
-        placeholder="Search"
-        v-model="search"
-      ></b-form-input>
-      <hr />
+      <b-row align-v="center">
+        <b-col>
+          <p class="text">Work of culture type</p>
+          <b-form-select
+            class="select"
+            v-model="selectedType"
+            :options="this.types"
+            v-on:change="setGernes"
+          ></b-form-select>
+        </b-col>
+        <b-col>
+          <p class="text">Work of culture genre</p>
+          <b-form-select
+            class="select"
+            v-model="selectedGenre"
+            :options="genresTypes"
+            :disabled="getStatus"
+          ></b-form-select>
+        </b-col>
+        <b-col>
+          <p class="text">Work of culture title</p>
+          <b-form-input
+            size="sm"
+            class="mr-sm-2"
+            placeholder="Search"
+            v-model="search"
+          ></b-form-input>
+        </b-col>
+      </b-row>
+
       <b-form @submit="getRecommendation">
-        <b-button type="submit" variant="primary">Search</b-button>
-        <hr />
+        <b-button style="width: 10%" type="submit" variant="primary"
+          >Search</b-button
+        >
         <b-form-checkbox
+          class="check"
           id="checkbox-1"
           v-model="status"
           name="checkbox-1"
@@ -47,35 +53,45 @@
         </b-form-checkbox>
       </b-form>
     </b-container>
+
     <hr />
+
+    <b-container align="center">
+      <b-row>
+        <b-col>
+          <b-pagination
+            v-if="show"
+            align="center"
+            v-model="currentPage"
+            :per-page="perPage"
+            :total-rows="rows"
+            first-text="First"
+            prev-text="Prev"
+            next-text="Next"
+            last-text="Last"
+            @input="paginate(currentPage)"
+          ></b-pagination>
+        </b-col>
+      </b-row>
+    </b-container>
+
     <div v-if="loading">
       <b-spinner label="Loading..." class="m-5"></b-spinner>
     </div>
     <b-container align="center">
-      <b-col align-v="center">
-        <work-of-culture
-          v-for="rec in displayRecommendations"
-          :name="rec.title"
-          :id="rec.id"
-          :image="rec.imageUrl"
-          :key="rec.id"
-          :type="rec.workOfCultureType"
-        ></work-of-culture>
-      </b-col>
-      <hr />
-      <hr />
-      <b-pagination
-        v-if="show"
-        align="center"
-        v-model="currentPage"
-        :per-page="perPage"
-        :total-rows="rows"
-        first-text="First"
-        prev-text="Prev"
-        next-text="Next"
-        last-text="Last"
-        @input="paginate(currentPage)"
-      ></b-pagination>
+      <b-row>
+        <b-col align-v="center">
+          <work-of-culture
+            v-for="rec in displayRecommendations"
+            :name="rec.title"
+            :id="rec.id"
+            :image="rec.imageUrl"
+            :key="rec.id"
+            :type="rec.workOfCultureType"
+            :alert="watchListAlert"
+          ></work-of-culture>
+        </b-col>
+      </b-row>
     </b-container>
   </div>
 </template>
@@ -119,6 +135,22 @@ export default {
     };
   },
   methods: {
+    watchListAlert(result) {
+      if (result == "s") {
+        this.alertShow = true;
+        this.alertVariant = "success";
+        this.alerText = "Work added to watch list";
+      } else if (result == "f") {
+        this.alertShow = true;
+        this.alertVariant = "warning";
+        this.alerText = "Work already in watch list";
+      } else {
+        this.alertShow = true;
+        this.alertVariant = "danger";
+        this.alerText = "Cannot connect to the server";
+      }
+    },
+
     paginate(currentPage) {
       const start = (currentPage - 1) * this.perPage;
       this.displayRecommendations = this.recommendations.slice(
@@ -292,8 +324,20 @@ export default {
 </script>
 
 <style scoped>
+.recommendation {
+  padding: 30px;
+}
+
+.check {
+  padding: 10px;
+}
+
 .select {
   margin: 10px;
   width: 20vh;
+}
+
+.text {
+  font-weight: 700;
 }
 </style>

@@ -39,6 +39,7 @@
             v-b-tooltip.hover
             title="Add to your watch list"
             variant="primary"
+            @click="addToWatchList"
             >Add to watch list</b-button
           >
           <b-button
@@ -59,12 +60,33 @@
 
 <script>
 export default {
-  props: ["name", "id", "image", "type"],
+  props: ["name", "id", "image", "type", "alert"],
   computed: {
     isLogged() {
       const user = JSON.parse(localStorage.getItem("user"));
       if (user != null) return true;
       else return false;
+    },
+  },
+  methods: {
+    async addToWatchList() {
+      let url =
+        "http://localhost:8080/api/watch-lists/" + this.type + "/" + this.id;
+
+      const user = JSON.parse(localStorage.getItem("user"));
+      const response = await fetch(url, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + user.accessToken,
+        },
+        method: "POST",
+      });
+      const data = await response.json();
+
+      if (data == this.id) {
+        this.alert("s");
+      } else this.alert("f");
     },
   },
 };
