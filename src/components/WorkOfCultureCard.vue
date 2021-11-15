@@ -46,6 +46,7 @@
             v-b-tooltip.hover
             title="Add to your seen list"
             variant="primary"
+            @click="addToSeenList"
             >Add to seen list</b-button
           >
 
@@ -60,7 +61,7 @@
 
 <script>
 export default {
-  props: ["name", "id", "image", "type", "alert"],
+  props: ["name", "id", "image", "type", "alertWatch", "alertSeen"],
   computed: {
     isLogged() {
       const user = JSON.parse(localStorage.getItem("user"));
@@ -85,8 +86,27 @@ export default {
       const data = await response.json();
 
       if (data == this.id) {
-        this.alert("s");
-      } else this.alert("f");
+        this.alertWatch("s");
+      } else this.alertWatch("f");
+    },
+    async addToSeenList() {
+      let url =
+        "http://localhost:8080/api/seen-lists/" + this.type + "/" + this.id;
+
+      const user = JSON.parse(localStorage.getItem("user"));
+      const response = await fetch(url, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + user.accessToken,
+        },
+        method: "POST",
+      });
+      const data = await response.json();
+
+      if (data == this.id) {
+        this.alertSeen("s");
+      } else this.alertSeen("f");
     },
   },
 };

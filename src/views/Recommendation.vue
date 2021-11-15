@@ -88,7 +88,8 @@
             :image="rec.imageUrl"
             :key="rec.id"
             :type="rec.workOfCultureType"
-            :alert="watchListAlert"
+            :alertWatch="watchListAlert"
+            :alertSeen="seenListAlert"
           ></work-of-culture>
         </b-col>
       </b-row>
@@ -144,6 +145,22 @@ export default {
         this.alertShow = true;
         this.alertVariant = "warning";
         this.alerText = "Work already in watch list";
+      } else {
+        this.alertShow = true;
+        this.alertVariant = "danger";
+        this.alerText = "Cannot connect to the server";
+      }
+    },
+
+    seenListAlert(result) {
+      if (result == "s") {
+        this.alertShow = true;
+        this.alertVariant = "success";
+        this.alerText = "Work added to seen list";
+      } else if (result == "f") {
+        this.alertShow = true;
+        this.alertVariant = "warning";
+        this.alerText = "Work already in seen list";
       } else {
         this.alertShow = true;
         this.alertVariant = "danger";
