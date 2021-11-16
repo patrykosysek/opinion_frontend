@@ -13,12 +13,13 @@
         class="mb-2"
         :footer="type"
       >
-        <b-button-group vertical v-if="isLogged">
+        <b-button-group vertical>
           <b-button
             class="btn"
             v-b-tooltip.hover
             title="Open works details"
             variant="primary"
+            @click="getDetails"
             >Details</b-button
           >
 
@@ -36,6 +37,7 @@
             >Reviews</b-button
           >
           <b-button
+            v-if="isLogged"
             v-b-tooltip.hover
             title="Add to your watch list"
             variant="primary"
@@ -43,6 +45,7 @@
             >Add to watch list</b-button
           >
           <b-button
+            v-if="isLogged"
             v-b-tooltip.hover
             title="Add to your seen list"
             variant="primary"
@@ -50,7 +53,11 @@
             >Add to seen list</b-button
           >
 
-          <b-button v-b-tooltip.hover title="Add review" variant="primary"
+          <b-button
+            v-if="isLogged"
+            v-b-tooltip.hover
+            title="Add review"
+            variant="primary"
             >Add review</b-button
           >
         </b-button-group>
@@ -70,6 +77,10 @@ export default {
     },
   },
   methods: {
+    getDetails() {
+      window.open("http://localhost:3000/details/" + this.type + "/" + this.id);
+    },
+
     async addToWatchList() {
       let url =
         "http://localhost:8080/api/watch-lists/" + this.type + "/" + this.id;

@@ -13,7 +13,11 @@
         class="mb-2"
         :footer="type"
       >
-        <b-button v-b-tooltip.hover title="Open works details" variant="primary"
+        <b-button
+          @click="this.getDetails"
+          v-b-tooltip.hover
+          title="Open works details"
+          variant="primary"
           >Details</b-button
         >
         <b-modal title="BootstrapVue">
@@ -27,6 +31,11 @@
 <script>
 export default {
   props: ["name", "id", "image", "type"],
+  methods: {
+    getDetails() {
+      window.open("http://localhost:3000/details/" + this.type + "/" + this.id);
+    },
+  },
 };
 </script>
 

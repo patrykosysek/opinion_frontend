@@ -7,7 +7,8 @@
     </div>
     <b-container align="center">
       <b-col align-v="center">
-        <job-card class="work"
+        <job-card
+          class="work"
           v-for="rec in displayRecommendations"
           :name="rec.title"
           :id="rec.id"
@@ -17,20 +18,18 @@
         ></job-card>
       </b-col>
 
-     
-      <b-pagination class="pagination"
-      align="center"
+      <b-pagination
+        class="pagination"
+        align="center"
         v-model="currentPage"
         :per-page="perPage"
-        :total-rows ="rows"
+        :total-rows="rows"
         first-text="First"
         prev-text="Prev"
         next-text="Next"
         last-text="Last"
         @input="paginate(currentPage)"
       ></b-pagination>
-      
-    
     </b-container>
   </div>
 </template>
@@ -59,7 +58,10 @@ export default {
   methods: {
     paginate(currentPage) {
       const start = (currentPage - 1) * this.perPage;
-      this.displayRecommendations = this.recommendations.slice(start, start + 1);
+      this.displayRecommendations = this.recommendations.slice(
+        start,
+        start + 1
+      );
       console.log("Halko");
     },
 
@@ -121,19 +123,16 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-
-.home{
+.home {
   padding: 30px;
 }
 
-.pagination{
+.pagination {
   bottom: 150px;
   position: absolute;
-  
 }
 
 .work {
   padding: 20px;
 }
-
 </style>
