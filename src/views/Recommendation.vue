@@ -169,6 +169,7 @@ export default {
     },
 
     paginate(currentPage) {
+      this.alertShow=false;
       const start = (currentPage - 1) * this.perPage;
       this.displayRecommendations = this.recommendations.slice(
         start,

@@ -2,35 +2,41 @@
   <div class="home">
     <h1>Our Recommendation</h1>
     <hr />
+
+    <b-container align="center">
+      <b-row>
+        <b-col>
+          <b-pagination
+            class="pagination"
+            align="center"
+            v-model="currentPage"
+            :per-page="perPage"
+            :total-rows="rows"
+            first-text="First"
+            prev-text="Prev"
+            next-text="Next"
+            last-text="Last"
+            @input="paginate(currentPage)"
+          ></b-pagination>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col align-v="center">
+          <job-card
+            class="work"
+            v-for="rec in displayRecommendations"
+            :name="rec.title"
+            :id="rec.id"
+            :image="rec.imageUrl"
+            :key="rec.id"
+            :type="rec.workOfCultureType"
+          ></job-card>
+        </b-col>
+      </b-row>
+    </b-container>
     <div v-if="loading">
       <b-spinner label="Loading..." class="m-5"></b-spinner>
     </div>
-    <b-container align="center">
-      <b-col align-v="center">
-        <job-card
-          class="work"
-          v-for="rec in displayRecommendations"
-          :name="rec.title"
-          :id="rec.id"
-          :image="rec.imageUrl"
-          :key="rec.id"
-          :type="rec.workOfCultureType"
-        ></job-card>
-      </b-col>
-
-      <b-pagination
-        class="pagination"
-        align="center"
-        v-model="currentPage"
-        :per-page="perPage"
-        :total-rows="rows"
-        first-text="First"
-        prev-text="Prev"
-        next-text="Next"
-        last-text="Last"
-        @input="paginate(currentPage)"
-      ></b-pagination>
-    </b-container>
   </div>
 </template>
 
@@ -62,7 +68,6 @@ export default {
         start,
         start + 1
       );
-      console.log("Halko");
     },
 
     async getRecommendations() {
@@ -72,7 +77,6 @@ export default {
           "http://localhost:8080/api/work-of-culture/recommendation"
         );
         const data = await response.json();
-        console.log(data);
         this.recommendations = data;
         this.loading = false;
         this.rows = this.recommendations.length;
@@ -125,11 +129,6 @@ export default {
 <style lang="scss" scoped>
 .home {
   padding: 30px;
-}
-
-.pagination {
-  bottom: 150px;
-  position: absolute;
 }
 
 .work {

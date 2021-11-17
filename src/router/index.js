@@ -4,7 +4,8 @@ import Home from "../views/Home.vue";
 import Recommendation from "../views/Recommendation.vue";
 import Registration from "../views/Registration.vue";
 import Details from "../views/WorkDetails.vue";
-
+import WatchList from "../views/WatchList.vue";
+import SeenList from "../views/SeenList.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -23,20 +24,30 @@ const routes = [
       import(/* webpackChunkName: "about" */ "../views/Login.vue"),
   },
   {
-    path:"/recommendation",
+    path: "/recommendation",
     name: "recommendation",
-    component: Recommendation
+    component: Recommendation,
   },
   {
-    path:"/registration",
+    path: "/registration",
     name: "registration",
-    component: Registration
+    component: Registration,
   },
   {
     path: "/details/:type/:id",
-    name:"details",
-    component: Details
-  }
+    name: "details",
+    component: Details,
+  },
+  {
+    path: "/watchlist",
+    name: "watchlist",
+    component: WatchList,
+  },
+  {
+    path: "/seenlist",
+    name: "seenlist",
+    component: SeenList,
+  },
 ];
 
 const router = new VueRouter({
