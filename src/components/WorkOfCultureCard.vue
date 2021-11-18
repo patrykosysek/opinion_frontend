@@ -58,6 +58,7 @@
             v-b-tooltip.hover
             title="Add review"
             variant="primary"
+            @click="addReview"
             >Add review</b-button
           >
         </b-button-group>
@@ -68,7 +69,15 @@
 
 <script>
 export default {
-  props: ["name", "id", "image", "type", "alertWatch", "alertSeen"],
+  props: [
+    "name",
+    "id",
+    "image",
+    "type",
+    "alertWatch",
+    "alertSeen",
+    "alertReview",
+  ],
   computed: {
     isLogged() {
       const user = JSON.parse(localStorage.getItem("user"));
@@ -118,6 +127,29 @@ export default {
       if (data == this.id) {
         this.alertSeen("s");
       } else this.alertSeen("f");
+    },
+    async addReview() {
+      let url =
+        "http://localhost:8080/api/review/" +
+        this.type +
+        "/" +
+        this.id +
+        "/reviewed";
+
+      const user = JSON.parse(localStorage.getItem("user"));
+      const response = await fetch(url, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + user.accessToken,
+        },
+        method: "GET",
+      });
+      const data = await response.json();
+
+      if (data == false) {
+        window.location = "/review" + "/" + this.type + "/" + this.id;
+      } else this.alertReview();
     },
   },
 };

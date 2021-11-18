@@ -90,6 +90,7 @@
             :type="rec.workOfCultureType"
             :alertWatch="watchListAlert"
             :alertSeen="seenListAlert"
+            :alertReview="alertReview"
           ></work-of-culture>
         </b-col>
       </b-row>
@@ -167,9 +168,14 @@ export default {
         this.alerText = "Cannot connect to the server";
       }
     },
+    alertReview() {
+      this.alertShow = true;
+      this.alertVariant = "warning";
+      this.alerText = "Work already reviewed";
+    },
 
     paginate(currentPage) {
-      this.alertShow=false;
+      this.alertShow = false;
       const start = (currentPage - 1) * this.perPage;
       this.displayRecommendations = this.recommendations.slice(
         start,

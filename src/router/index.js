@@ -6,6 +6,8 @@ import Registration from "../views/Registration.vue";
 import Details from "../views/WorkDetails.vue";
 import WatchList from "../views/WatchList.vue";
 import SeenList from "../views/SeenList.vue";
+import AddReview from "../views/AddReview.vue";
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -47,6 +49,11 @@ const routes = [
     path: "/seenlist",
     name: "seenlist",
     component: SeenList,
+  },
+  {
+    path: "/review/:type/:id",
+    name: "/review/:type/:id",
+    component: AddReview,
   },
 ];
 

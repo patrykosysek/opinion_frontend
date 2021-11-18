@@ -56,7 +56,8 @@ export default {
   methods: {
     logOut() {
       localStorage.removeItem("user");
-      window.location.reload(true);
+      window.location = "/";
+     // window.location.reload(true);
     },
   },
 };
