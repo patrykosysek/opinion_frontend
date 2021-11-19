@@ -61,6 +61,15 @@
             @click="addReview"
             >Add review</b-button
           >
+
+          <b-button
+            v-if="isLogged"
+            v-b-tooltip.hover
+            title="Add review"
+            variant="primary"
+            @click="addDiscussion"
+            >Add discussion</b-button
+          >
         </b-button-group>
       </b-card>
     </b-col>
@@ -150,6 +159,9 @@ export default {
       if (data == false) {
         window.location = "/review" + "/" + this.type + "/" + this.id;
       } else this.alertReview();
+    },
+    async addDiscussion() {
+      window.location = "/discussion" + "/" + this.type + "/" + this.id;
     },
   },
 };

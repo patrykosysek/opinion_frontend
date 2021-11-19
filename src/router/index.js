@@ -7,6 +7,7 @@ import Details from "../views/WorkDetails.vue";
 import WatchList from "../views/WatchList.vue";
 import SeenList from "../views/SeenList.vue";
 import AddReview from "../views/AddReview.vue";
+import AddDiscussion from "../views/AddDiscussion.vue";
 
 Vue.use(VueRouter);
 
@@ -54,6 +55,11 @@ const routes = [
     path: "/review/:type/:id",
     name: "/review/:type/:id",
     component: AddReview,
+  },
+  {
+    path: "/discussion/:type/:id",
+    name: "/discussion/:type/:id",
+    component: AddDiscussion,
   },
 ];
 
