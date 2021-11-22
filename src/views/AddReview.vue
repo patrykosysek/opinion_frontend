@@ -36,7 +36,7 @@ export default {
       type: this.$route.params.type,
       alertShow: false,
       alertVariant: "warning",
-      alerText: "Work already reviewed",
+      alerText: "Review too long",
       title: "",
       text: {
         review: "",
@@ -74,6 +74,8 @@ export default {
         method: "POST",
         body: JSON.stringify(this.text),
       });
+
+    console.log(response);
 
       if (response.status == 400) {
         this.alertShow = true;

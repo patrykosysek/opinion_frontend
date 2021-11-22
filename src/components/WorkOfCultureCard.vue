@@ -34,6 +34,7 @@
             v-b-tooltip.hover
             title="Open works reviews"
             variant="primary"
+            @click="goToReviews"
             >Reviews</b-button
           >
           <b-button
@@ -155,13 +156,23 @@ export default {
         method: "GET",
       });
       const data = await response.json();
+      console.log(data);
 
       if (data == false) {
-        window.location = "/review" + "/" + this.type + "/" + this.id;
+        window.open(
+          "http://localhost:3000/review" + "/" + this.type + "/" + this.id
+        );
       } else this.alertReview();
     },
     async addDiscussion() {
-      window.location = "/discussion" + "/" + this.type + "/" + this.id;
+      window.open(
+        "http://localhost:3000/discussion" + "/" + this.type + "/" + this.id
+      );
+    },
+    async goToReviews() {
+      window.open(
+        "http://localhost:3000/reviews-work" + "/" + this.type + "/" + this.id
+      );
     },
   },
 };
