@@ -14,6 +14,7 @@
           <b-nav-item to="/recommendation">Recommendation</b-nav-item>
           <b-nav-item v-if="isLogged" to="/watchlist">Watch list</b-nav-item>
           <b-nav-item v-if="isLogged" to="/seenlist">Seen list</b-nav-item>
+          <b-nav-item v-if="isLogged" to="/reviews-user">Reviews</b-nav-item>
           <b-nav-item v-if="isUser" to="/">User</b-nav-item>
           <!-- <b-nav-item to="/login">Login</b-nav-item> -->
         </b-navbar-nav>
@@ -24,7 +25,7 @@
             <template v-slot:button-content>
               <em>User</em>
             </template>
-            <b-dropdown-item href="#">Profile</b-dropdown-item>
+            <!-- <b-dropdown-item href="#">Profile</b-dropdown-item> -->
             <b-dropdown-item v-if="isLogged" @click="logOut"
               >Logout</b-dropdown-item
             >

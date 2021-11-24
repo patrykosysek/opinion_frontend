@@ -9,6 +9,7 @@ import SeenList from "../views/SeenList.vue";
 import AddReview from "../views/AddReview.vue";
 import AddDiscussion from "../views/AddDiscussion.vue";
 import ReviewsWork from "../views/ReviewsWork.vue";
+import ReviewsUser from "../views/ReviewsUser.vue";
 
 
 Vue.use(VueRouter);
@@ -67,6 +68,11 @@ const routes = [
     path: "/reviews-work/:type/:id",
     name: "/reviews-work/:type/:id",
     component: ReviewsWork,
+  },
+  {
+    path: "/reviews-user",
+    name: "/reviews-user",
+    component: ReviewsUser,
   },
 ];
 

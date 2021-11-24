@@ -1,6 +1,6 @@
 <template>
   <div class="recommendation">
-    <h1>{{ this.title }}</h1>
+    <h1>Reviews</h1>
     <hr />
     <b-alert :show="alertShow" :variant="alertVariant">{{
       this.alertText
@@ -9,12 +9,12 @@
     <b-container>
       <b-row align-v="center">
         <b-col>
-          <p class="text">Sort by</p>
+          <p class="text">Work of culture type</p>
           <b-form-select
             class="select"
             v-model="selectedType"
             :options="this.types"
-            v-on:change="changeSort"
+            v-on:change="changeType"
           ></b-form-select>
         </b-col>
       </b-row>
@@ -54,9 +54,9 @@
             :id="rec.id"
             :comment="rec.comment"
             :key="rec.id"
-            :type="type"
+            :type="selectedType"
             :createDate="rec.createDate"
-            :userLike="rec.userLike"
+            :title="rec.title"
             :likes="rec.likes"
           ></review-card>
         </b-col>
@@ -66,35 +66,32 @@
 </template>
 
 <script>
-import ReviewCard from "../components/ReviewCard.vue";
+import ReviewUserCard from "../components/ReviewUserCard.vue";
 
 export default {
-  components: { "review-card": ReviewCard },
+  components: { "review-card": ReviewUserCard },
   computed: {
     show() {
       return this.rows > 0;
     },
   },
   mounted() {
-    this.getTitle();
-    this.getByDate();
+    //this.getByAnime();
   },
   data() {
     return {
-      types: ["DATE ↓", "DATE ↑", "LIKES ↓", "LIKES ↑"],
+      types: ["ANIME", "MANGA", "TVSERIES", "MOVIE", "GAME"],
       alertShow: false,
       alertVariant: "",
       alertText: "",
       currentPage: 1,
       perPage: 1,
       rows: 0,
-      id: this.$route.params.id,
-      type: this.$route.params.type,
       title: "",
       reviews: [],
       displayReviews: [],
       loading: false,
-      selectedType: "DATE ↓",
+      selectedType: null,
       url: "",
     };
   },
@@ -104,43 +101,36 @@ export default {
       this.alertShow = false;
       const start = (currentPage - 1) * this.perPage;
       this.displayReviews = this.reviews.slice(start, start + 1);
+
+      let url =
+        "http://localhost:8080/api/review/" +
+        this.selectedType +
+        "?page=" +
+        start +
+        "&size=" +
+        this.perPage;
+
+      const user = JSON.parse(localStorage.getItem("user"));
+      const response = await fetch(url, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + user.accessToken,
+        },
+        method: "GET",
+      });
+      const data = await response.json();
+      this.displayReviews = data.content;
     },
 
-    async changeSort() {
+    async changeType() {
       this.currentPage = 1;
       this.perPage = 1;
       this.rows = 0;
       this.alertShow = false;
+      this.displayReviews = [];
 
-      if (this.selectedType == "DATE ↓") {
-        this.url =
-          "http://localhost:8080/api/review/" +
-          this.type +
-          "/" +
-          this.id +
-          "/date?oldest=true";
-      } else if (this.selectedType == "DATE ↑") {
-        this.url =
-          "http://localhost:8080/api/review/" +
-          this.type +
-          "/" +
-          this.id +
-          "/date?oldest=false";
-      } else if (this.selectedType == "LIKES ↑") {
-        this.url =
-          "http://localhost:8080/api/review/" +
-          this.type +
-          "/" +
-          this.id +
-          "/likes?favourite=false";
-      } else if (this.selectedType == "LIKES ↓") {
-        this.url =
-          "http://localhost:8080/api/review/" +
-          this.type +
-          "/" +
-          this.id +
-          "/likes?favourite=true";
-      }
+      this.url = "http://localhost:8080/api/review/" + this.selectedType;
 
       const user = JSON.parse(localStorage.getItem("user"));
       const response = await fetch(this.url, {
@@ -164,53 +154,6 @@ export default {
         this.alertText = "No reviews were found";
         this.alertShow = true;
       }
-    },
-    async getByDate() {
-      this.url =
-        "http://localhost:8080/api/review/" +
-        this.type +
-        "/" +
-        this.id +
-        "/date?oldest=false";
-
-      const user = JSON.parse(localStorage.getItem("user"));
-      const response = await fetch(this.url, {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + user.accessToken,
-        },
-        method: "GET",
-      });
-      const data = await response.json();
-      console.log(data);
-      this.loading = false;
-      this.rows = data.totalElements;
-      this.reviews = data.content;
-      this.rows = data.totalElements;
-
-      if (this.rows != 0) {
-        this.displayReviews = data.content.slice(0, 1);
-      } else {
-        this.alertVariant = "warning";
-        this.alertText = "No reviews were found";
-        this.alertShow = true;
-      }
-      console.log(data);
-    },
-
-    async getTitle() {
-      let url =
-        "http://localhost:8080/api/work-of-culture/" +
-        this.type +
-        "/" +
-        this.id +
-        "/information";
-
-      const response = await fetch(url);
-      const data = await response.json();
-
-      this.title = data.title;
     },
   },
 };

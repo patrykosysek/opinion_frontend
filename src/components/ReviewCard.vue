@@ -23,7 +23,13 @@
                           variant="success"
                           >▲</b-button
                         >
-                        <p class="like">{{ this.displaylikes }}</p>
+                        <p
+                          v-show="render"
+                          class="like"
+                          :style="`--color: ${color}`"
+                        >
+                          {{ this.displaylikes }}
+                        </p>
                         <b-button
                           @click="this.downVote"
                           :disabled="this.dwv"
@@ -65,6 +71,8 @@ export default {
     return {
       disable: null,
       displaylikes: null,
+      render: true,
+      color: "black",
     };
   },
   computed: {
@@ -83,13 +91,14 @@ export default {
     getAuthor() {
       return "Author: " + this.author;
     },
-    getPostDate(){
-      return "Create date: "+ this.createDate;
-    }
+    getPostDate() {
+      return "Create date: " + this.createDate;
+    },
   },
   mounted() {
     this.setDisable();
     this.setLikes();
+    this.changeColor();
   },
   methods: {
     setDisable() {
@@ -97,8 +106,22 @@ export default {
       if (this.userLike == true) this.disable = true;
       if (this.userLike == false) this.disable = false;
     },
+    changeColor() {
+      if (this.displaylikes >= 0) this.color = "green";
+      else this.color = "red";
+    },
     setLikes() {
       this.displaylikes = this.likes;
+    },
+    forceRerender() {
+      // Remove my-component from the DOM
+      this.render = false;
+      this.changeColor();
+
+      this.$nextTick(() => {
+        // Add the component back in
+        this.render = true;
+      });
     },
     async downVote() {
       let url =
@@ -121,6 +144,7 @@ export default {
       if (data.id == this.id) {
         this.displaylikes = data.likes;
         this.disable = data.userLike;
+        this.forceRerender();
       }
     },
     async upVote() {
@@ -144,6 +168,7 @@ export default {
       if (data.id == this.id) {
         this.displaylikes = data.likes;
         this.disable = data.userLike;
+        this.forceRerender();
       }
     },
   },
@@ -151,14 +176,12 @@ export default {
 </script>
 
 <style scoped>
-/* .btn {
-  margin: 10px;
-} */
-
 .like {
   font-size: 5vh;
   font-weight: 700;
   padding: -10px;
+  --color: black;
+  color: var(--color);
 }
 
 .comment {

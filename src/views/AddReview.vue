@@ -41,6 +41,7 @@ export default {
       text: {
         review: "",
       },
+      isAdded: false,
     };
   },
   mounted() {
@@ -75,15 +76,20 @@ export default {
         body: JSON.stringify(this.text),
       });
 
-    console.log(response);
+      console.log(response);
 
-      if (response.status == 400) {
+      if (this.isAdded == true) {
+        this.alertVariant = "warning";
+        this.alerText = "Work already reviewed";
+        this.text.review = "";
+      } else if (response.status == 400) {
         this.alertShow = true;
       } else if (response.status == 201) {
         this.alertShow = true;
         this.alertVariant = "success";
         this.alerText = "Review successfully added";
         this.text.review = "";
+        this.isAdded = true;
       } else {
         this.alertShow = true;
         this.alertVariant = "danger";
