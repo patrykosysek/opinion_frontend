@@ -10,7 +10,7 @@ import AddReview from "../views/AddReview.vue";
 import AddDiscussion from "../views/AddDiscussion.vue";
 import ReviewsWork from "../views/ReviewsWork.vue";
 import ReviewsUser from "../views/ReviewsUser.vue";
-
+import DiscussionsUser from "../views/DiscussionsUser.vue";
 
 Vue.use(VueRouter);
 
@@ -73,6 +73,11 @@ const routes = [
     path: "/reviews-user",
     name: "/reviews-user",
     component: ReviewsUser,
+  },
+  {
+    path: "/discussions-user",
+    name: "/discussions-user",
+    component: DiscussionsUser,
   },
 ];
 
