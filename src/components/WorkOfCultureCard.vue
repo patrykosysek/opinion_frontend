@@ -27,8 +27,9 @@
             v-b-tooltip.hover
             title="Open works discussions"
             variant="primary"
-            >Discussions</b-button
-          >
+            @click="goToDiscussions"
+            >Discussions
+          </b-button>
 
           <b-button
             v-b-tooltip.hover
@@ -172,6 +173,15 @@ export default {
     async goToReviews() {
       window.open(
         "http://localhost:3000/reviews-work" + "/" + this.type + "/" + this.id
+      );
+    },
+    async goToDiscussions() {
+      window.open(
+        "http://localhost:3000/discussions-work" +
+          "/" +
+          this.type +
+          "/" +
+          this.id
       );
     },
   },

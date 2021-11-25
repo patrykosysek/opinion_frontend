@@ -26,14 +26,6 @@
           ></b-form-input>
         </b-col>
         <b-col>
-          <p class="text">Sort by</p>
-          <b-form-select
-            class="select"
-            v-model="selectedSort"
-            :options="this.sortTypes"
-          ></b-form-select>
-        </b-col>
-        <b-col>
           <b-button
             @click="submitSearch"
             style="width: 10vh"
@@ -73,17 +65,16 @@
     <b-container>
       <b-row>
         <b-col>
-          <review-card
+          <discussion-card
             v-for="rec in displayDiscussions"
-            :author="rec.author"
             :id="rec.id"
-            :comment="rec.comment"
             :key="rec.id"
             :type="selectedType"
             :createDate="rec.createDate"
             :title="rec.title"
-            :likes="rec.likes"
-          ></review-card>
+            :topic="rec.topic"
+            :text="rec.text"
+          ></discussion-card>
         </b-col>
       </b-row>
     </b-container>
@@ -91,10 +82,10 @@
 </template>
 
 <script>
-import ReviewUserCard from "../components/ReviewUserCard.vue";
+import DiscussionUserCard from "../components/DiscussionUserCard.vue";
 
 export default {
-  components: { "review-card": ReviewUserCard },
+  components: { "discussion-card": DiscussionUserCard },
   computed: {
     show() {
       return this.rows > 0;
@@ -104,7 +95,6 @@ export default {
   data() {
     return {
       types: ["ANIME", "MANGA", "TVSERIES", "MOVIE", "GAME"],
-      sortTypes: ["DATE ↓", "DATE ↑", "TOPIC ↓", "TOPIC ↑"],
       alertShow: false,
       alertVariant: "",
       alertText: "",
@@ -116,8 +106,9 @@ export default {
       displayDiscussions: [],
       loading: false,
       selectedType: "ANIME",
-      selectedSort: "DATE ↓",
       url: "",
+      topic: false,
+      saveTopic: "",
     };
   },
 
@@ -127,10 +118,24 @@ export default {
       const start = (currentPage - 1) * this.perPage;
       this.displayDiscussions = this.discussions.slice(start, start + 1);
 
-      if (this.search.length > 0) {
-        this.url = this.url + "&page=" + start + "&size=" + this.perPage;
+      if (this.topic == true) {
+        this.url =
+          "http://localhost:8080/api/discussion/" +
+          this.selectedType +
+          "/topic-desc?topic=" +
+          this.saveTopic +
+          "&page=" +
+          start +
+          "&size=" +
+          this.perPage;
       } else {
-        this.url = this.url + "?page=" + start + "&size=" + this.perPage;
+        this.url =
+          "http://localhost:8080/api/discussion/" +
+          this.selectedType +
+          "/desc?page=" +
+          start +
+          "&size=" +
+          this.perPage;
       }
 
       const user = JSON.parse(localStorage.getItem("user"));
@@ -155,18 +160,12 @@ export default {
 
       this.url = "http://localhost:8080/api/discussion/" + this.selectedType;
       const user = JSON.parse(localStorage.getItem("user"));
+
       if (this.search.length > 0) {
-        let params = {
-          topic: this.search,
-        };
+        this.saveTopic = this.search;
+        this.topic = true;
+        this.url = this.url + "/topic-desc?topic=" + this.search;
 
-        let query = Object.keys(params)
-          .map(
-            (k) => encodeURIComponent(k) + "=" + encodeURIComponent(params[k])
-          )
-          .join("&");
-
-        this.url + "?" + query;
         const response = await fetch(this.url, {
           headers: {
             Accept: "application/json",
@@ -175,21 +174,24 @@ export default {
           },
           method: "GET",
         });
+
         const data = await response.json();
 
         this.loading = false;
         this.discussions = data.content;
         this.rows = data.totalElements;
-        console.log("1", data);
 
         if (this.rows != 0) {
           this.displayDiscussions = data.content.slice(0, 1);
         } else {
           this.alertVariant = "warning";
-          this.alertText = "No reviews were found";
+          this.alertText = "No discussions were found";
           this.alertShow = true;
         }
       } else {
+        this.url = this.url + "/desc";
+        this.topic = false;
+
         const response = await fetch(this.url, {
           headers: {
             Accept: "application/json",
@@ -203,12 +205,12 @@ export default {
         this.loading = false;
         this.discussions = data.content;
         this.rows = data.totalElements;
-        console.log("2", data);
+
         if (this.rows != 0) {
           this.displayDiscussions = data.content.slice(0, 1);
         } else {
           this.alertVariant = "warning";
-          this.alertText = "No reviews were found";
+          this.alertText = "No discussions were found";
           this.alertShow = true;
         }
       }

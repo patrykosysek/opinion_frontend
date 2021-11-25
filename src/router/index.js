@@ -11,6 +11,7 @@ import AddDiscussion from "../views/AddDiscussion.vue";
 import ReviewsWork from "../views/ReviewsWork.vue";
 import ReviewsUser from "../views/ReviewsUser.vue";
 import DiscussionsUser from "../views/DiscussionsUser.vue";
+import DiscussionsWork from "../views/DiscussionsWork.vue";
 
 Vue.use(VueRouter);
 
@@ -78,6 +79,11 @@ const routes = [
     path: "/discussions-user",
     name: "/discussions-user",
     component: DiscussionsUser,
+  },
+  {
+    path: "/discussions-work/:type/:id",
+    name: "/discussions-work/:type/:id",
+    component: DiscussionsWork,
   },
 ];
 

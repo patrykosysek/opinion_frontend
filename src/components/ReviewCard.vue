@@ -66,7 +66,7 @@
 
 <script>
 export default {
-  props: ["comment", "id", "type", "createDate", "author", "userLike", "likes"],
+  props: ["comment", "id", "type", "createDate", "author", "userLike", "likes","changeLikes"],
   data() {
     return {
       disable: null,
@@ -145,6 +145,7 @@ export default {
         this.displaylikes = data.likes;
         this.disable = data.userLike;
         this.forceRerender();
+        this.changeLikes(data.id,data.likes,data.userLike);
       }
     },
     async upVote() {
@@ -169,6 +170,7 @@ export default {
         this.displaylikes = data.likes;
         this.disable = data.userLike;
         this.forceRerender();
+        this.changeLikes(data.id,data.likes,data.userLike);
       }
     },
   },

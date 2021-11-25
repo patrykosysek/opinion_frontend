@@ -58,6 +58,7 @@
             :createDate="rec.createDate"
             :userLike="rec.userLike"
             :likes="rec.likes"
+            :changeLikes="changeLikes"
           ></review-card>
         </b-col>
       </b-row>
@@ -183,7 +184,7 @@ export default {
         method: "GET",
       });
       const data = await response.json();
-      console.log(data);
+
       this.loading = false;
       this.rows = data.totalElements;
       this.reviews = data.content;
@@ -196,7 +197,6 @@ export default {
         this.alertText = "No reviews were found";
         this.alertShow = true;
       }
-      console.log(data);
     },
 
     async getTitle() {
@@ -211,6 +211,14 @@ export default {
       const data = await response.json();
 
       this.title = data.title;
+    },
+    changeLikes(id, likes, userLike) {
+      for (var i = 0; i < this.reviews.length; i++) {
+        if (this.reviews[i].id == id) {
+          this.reviews[i].likes = likes;
+          this.reviews[i].userLike = userLike;
+        }
+      }
     },
   },
 };
