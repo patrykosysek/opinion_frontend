@@ -75,6 +75,8 @@
             :title="rec.title"
             :topic="rec.topic"
             :text="rec.text"
+            :sAlert="answerAdded"
+            :fAlert="answerNotAdded"
           ></discussion-card>
         </b-col>
       </b-row>
@@ -381,6 +383,16 @@ export default {
       const data = await response.json();
 
       this.title = data.title;
+    },
+    answerAdded() {
+      this.alertVariant = "success";
+      this.alertText = "Answer successfully added";
+      this.alertShow = true;
+    },
+    answerNotAdded() {
+      this.alertVariant = "warning";
+      this.alertText = "Cannot add answer";
+      this.alertShow = true;
     },
   },
 };

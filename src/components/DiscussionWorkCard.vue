@@ -13,10 +13,24 @@
                 class="mb-2"
                 :footer="getPostDate"
               >
-                <b-container>
-                  <b-row> </b-row>
-                </b-container>
               </b-card>
+              <b-form-textarea
+                id="textarea"
+                v-model="answer.text"
+                placeholder="Enter answer..."
+                rows="11"
+                max-rows="11"
+                :state="answer.text.length > 0"
+                no-resize
+              ></b-form-textarea>
+              <hr />
+              <b-button
+                @click="addAnswer"
+                style="width: 15vh"
+                type="submit"
+                variant="primary"
+                >Add answer</b-button
+              >
             </b-col>
           </b-row>
         </b-col>
@@ -67,7 +81,16 @@
 
 <script>
 export default {
-  props: ["id", "type", "createDate", "topic", "title", "text"],
+  props: [
+    "id",
+    "type",
+    "createDate",
+    "topic",
+    "title",
+    "text",
+    "sAlert",
+    "fAlert",
+  ],
   data() {
     return {
       alertShow: false,
@@ -81,6 +104,9 @@ export default {
       displayAnswers: [],
       discussionInfo: [],
       author: "",
+      answer: {
+        text: "",
+      },
     };
   },
   computed: {
@@ -98,6 +124,39 @@ export default {
     async paginate(currentPage) {
       const start = (currentPage - 1) * this.perPage;
       this.displayAnswers = this.answers.slice(start, start + 1);
+    },
+    async addAnswer() {
+      let url =
+        "http://localhost:8080/api/discussion/" +
+        this.type +
+        "/" +
+        this.id +
+        "/answer";
+
+      const user = JSON.parse(localStorage.getItem("user"));
+
+      const response = await fetch(url, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + user.accessToken,
+        },
+        method: "POST",
+        body: JSON.stringify(this.answer),
+      });
+      const data = await response.json();
+
+      if (response.status == 201) {
+        this.answers.unshift(data);
+        this.displayAnswers = this.answers.slice(0, 1);
+        this.rows = this.rows + 1;
+        this.currentPage = 1;
+        this.answer.text = "";
+
+        this.sAlert();
+      } else if (response.status == 400) {
+        this.fAlert();
+      }
     },
     async getDiscussionInfo() {
       let url =
