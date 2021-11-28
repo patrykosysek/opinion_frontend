@@ -72,6 +72,14 @@
             @click="addDiscussion"
             >Add discussion</b-button
           >
+          <b-button
+            v-if="isAdmin"
+            v-b-tooltip.hover
+            title="Show statistics"
+            variant="primary"
+            @click="getStatistics(id, type)"
+            >Statistics</b-button
+          >
         </b-button-group>
       </b-card>
     </b-col>
@@ -88,12 +96,22 @@ export default {
     "alertWatch",
     "alertSeen",
     "alertReview",
+    "getStatistics",
   ],
   computed: {
     isLogged() {
       const user = JSON.parse(localStorage.getItem("user"));
       if (user != null) return true;
       else return false;
+    },
+    isAdmin() {
+      const user = JSON.parse(localStorage.getItem("user"));
+      return this.isLogged && user.role == "ADMIN";
+    },
+    reviewCount() {
+      return this.statistics.reviewCount == null
+        ? 0
+        : this.statistics.reviewCount;
     },
   },
   methods: {

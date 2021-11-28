@@ -16,7 +16,6 @@
           <b-nav-item v-if="isLogged" to="/seenlist">Seen list</b-nav-item>
           <b-nav-item v-if="isLogged" to="/reviews-user">Reviews</b-nav-item>
            <b-nav-item v-if="isLogged" to="/discussions-user">Discussions</b-nav-item>
-          <b-nav-item v-if="isUser" to="/">User</b-nav-item>
           <!-- <b-nav-item to="/login">Login</b-nav-item> -->
         </b-navbar-nav>
 

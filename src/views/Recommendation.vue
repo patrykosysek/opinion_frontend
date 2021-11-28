@@ -6,6 +6,29 @@
       this.alerText
     }}</b-alert>
 
+    <b-sidebar
+      v-model="sidebar"
+      id="sidebar-right"
+      title="Statistics"
+      right
+      shadow
+    >
+      <div class="px-3 py-2">
+        <h3>Review count</h3>
+        <p class="sd">{{ this.statistics.reviewCount }}</p>
+        <hr />
+        <h3>Discussion count</h3>
+        <p class="sd">{{ this.statistics.discussionCount }}</p>
+        <hr />
+        <h3>Watchlist count</h3>
+        <p class="sd">{{ this.statistics.watchListCount }}</p>
+        <hr />
+        <h3>Seenlist count</h3>
+        <p class="sd">{{ this.statistics.seenListCount }}</p>
+        <hr />
+      </div>
+    </b-sidebar>
+
     <b-container>
       <b-row align-v="center">
         <b-col>
@@ -91,6 +114,7 @@
             :alertWatch="watchListAlert"
             :alertSeen="seenListAlert"
             :alertReview="alertReview"
+            :getStatistics="getStatistics"
           ></work-of-culture>
         </b-col>
       </b-row>
@@ -134,9 +158,47 @@ export default {
       displayRecommendations: [],
       loading: false,
       status: "false",
+      statistics: {
+        reviewCount: 0,
+        discussionCount: 0,
+        watchListCount: 0,
+        seenListCount: 0,
+      },
+      sidebar: false,
+      fetch: false,
     };
   },
   methods: {
+    async getStatistics(id, type) {
+      if (this.fetch == false) {
+        let url =
+          "http://localhost:8080/api/work-of-culture/" +
+          type +
+          "/" +
+          id +
+          "/statistic";
+
+        const user = JSON.parse(localStorage.getItem("user"));
+        const response = await fetch(url, {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + user.accessToken,
+          },
+          method: "GET",
+        });
+        const data = await response.json();
+
+        this.statistics.reviewCount = data.statisticResponseDTO.reviewCount;
+        this.statistics.discussionCount =
+          data.statisticResponseDTO.discussionCount;
+        this.statistics.watchListCount =
+          data.statisticResponseDTO.watchListCount;
+        this.statistics.seenListCount = data.statisticResponseDTO.seenListCount;
+        this.fetch = true;
+      }
+      this.sidebar = !this.sidebar;
+    },
     watchListAlert(result) {
       if (result == "s") {
         this.alertShow = true;
@@ -176,6 +238,8 @@ export default {
 
     paginate(currentPage) {
       this.alertShow = false;
+      this.sidebar = false;
+      this.fetch = false;
       const start = (currentPage - 1) * this.perPage;
       this.displayRecommendations = this.recommendations.slice(
         start,
@@ -320,6 +384,8 @@ export default {
       this.displayRecommendations = [];
       this.currentPage = 1;
       this.rows = 0;
+      this.sidebar = false;
+      this.fetch = false;
 
       if (this.search != "") this.getRecommendationBySearch();
       else if (this.getStatus == true) {
@@ -363,5 +429,11 @@ export default {
 
 .text {
   font-weight: 700;
+}
+
+.sd {
+  font-weight: 700;
+  color: blue;
+  font-size: 30px;
 }
 </style>
