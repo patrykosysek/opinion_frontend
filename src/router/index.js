@@ -12,6 +12,7 @@ import ReviewsWork from "../views/ReviewsWork.vue";
 import ReviewsUser from "../views/ReviewsUser.vue";
 import DiscussionsUser from "../views/DiscussionsUser.vue";
 import DiscussionsWork from "../views/DiscussionsWork.vue";
+import AdminStatistics from "../views/AdminStatistics.vue";
 
 Vue.use(VueRouter);
 
@@ -84,6 +85,11 @@ const routes = [
     path: "/discussions-work/:type/:id",
     name: "/discussions-work/:type/:id",
     component: DiscussionsWork,
+  },
+  {
+    path: "/statistics",
+    name: "/statistics",
+    component: AdminStatistics,
   },
 ];
 
