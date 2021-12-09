@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <h1>Our Recommendation</h1>
+    <h1>Our recommendations</h1>
     <hr />
 
     <b-container align="center">

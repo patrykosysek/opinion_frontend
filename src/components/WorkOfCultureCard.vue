@@ -24,6 +24,7 @@
           >
 
           <b-button
+           v-if="isLogged"
             v-b-tooltip.hover
             title="Open works discussions"
             variant="primary"
@@ -32,6 +33,7 @@
           </b-button>
 
           <b-button
+           v-if="isLogged"
             v-b-tooltip.hover
             title="Open works reviews"
             variant="primary"

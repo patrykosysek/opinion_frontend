@@ -91,7 +91,7 @@ export default {
         if (status == 400) {
           this.alertShow = true;
           this.alertVariant = "warning";
-          this.alerText = "Topic or discussion text too LONG!";
+          this.alerText = "Topic or discussion text too long";
         } else if (status == 201) {
           this.alertShow = true;
           this.alertVariant = "success";
