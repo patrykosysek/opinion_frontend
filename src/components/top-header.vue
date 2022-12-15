@@ -58,6 +58,11 @@ export default {
       return this.isLogged && user.role == "OPINION_USER";
     },
   },
+  data() {
+    return {
+      amount: 1
+    };
+  },
   methods: {
     logOut() {
       localStorage.removeItem("user");

@@ -1,5 +1,7 @@
 <template>
   <div class="home">
+    <p style="display:inline-block;margin-right:5px;">Dzisiejsza liczba unikalnych zalogowań: </p>
+    <p style="font-weight:bold;color:green;display:inline-block;"> {{this.amount}}</p>
     <h1>Our recommendations</h1>
     <hr />
 
@@ -48,6 +50,7 @@ export default {
   name: "home",
   mounted() {
     this.getRecommendations();
+    this.getLoginStatistic();
     // this.paginate(this.currentPage);
   },
   data() {
@@ -58,6 +61,7 @@ export default {
       recommendations: [],
       displayRecommendations: [],
       loading: false,
+      amount: 0,
     };
   },
   components: { "job-card": JobCard },
@@ -84,6 +88,18 @@ export default {
       } catch (error) {
         console.log(error);
         this.loading = false;
+      }
+    },
+     async getLoginStatistic() { 
+      try{
+        fetch(
+          "http://127.0.0.1:8000/api/entries")
+          .then(response => response.json())
+        .then(data => {
+          this.amount = data['amount'];
+        });
+      }catch(error){
+        console.log(error);
       }
     },
 

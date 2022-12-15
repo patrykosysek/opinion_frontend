@@ -67,6 +67,9 @@ export default {
         nickname: null,
         accessToken: null,
       },
+      entry:{
+        userId: null
+      },
       alertShow: false,
       alertVariant: "success",
       alerText: "Successful login",
@@ -88,15 +91,18 @@ export default {
         const data = await response.json();
 
         this.user.id = data.user.id;
+        this.entry.userId = data.user.id;
         this.user.email = data.user.email;
         this.user.nickname = data.user.nickname;
         this.user.accessToken = data.accessToken;
         this.user.role = data.role;
         localStorage.removeItem("user");
         localStorage.setItem("user", JSON.stringify(this.user));
+        this.logEntry();
 
         window.location = "/";
       } catch (error) {
+        console.log(error);
         this.alertShow = true;
         this.alertVariant = "danger";
         this.alerText = "Login failed";
@@ -104,6 +110,17 @@ export default {
         this.login.password = "";
       }
     },
+    async logEntry(){
+    const response = await fetch("http://127.0.0.1:8000/api/add-entries", {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+          body: JSON.stringify(this.entry),
+        });
+        console.log(response);
+  },
   },
 };
 </script>
